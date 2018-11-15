@@ -2,6 +2,8 @@
 
 Transform MNI coordinate to AAL and BA structural names.
 
+**Please notice the program is too beta to be used for production purpose, code review and further checks are necessary.**
+
 usage: `brainSpy.py [-h] [-r radius] [-t threshold]`
 
 optional arguments:
@@ -19,13 +21,25 @@ optional arguments:
 
 ## Tutorial
 
-### Precise query
+### Installing
+
+#### Windows
+
+Checkout this page: https://github.com/ezPsycho/brainSpy-cli/releases/tag/0.0.1
+
+#### Linux
+
+WIP.
+
+### Using
+
+#### Precise query
 
 query brain structure **of** specific MNI coordinate, or its nearest structure.
 
 ![Screen record of precise query](https://github.com/ezPsycho/brainSpy-cli/blob/master/docs/assets/precise_query.gif?raw=true)
 
-### Fuzzy query
+#### Fuzzy query
 
 query brain structure **around** specifc MNI coordinate, or its nearset structure.
 
