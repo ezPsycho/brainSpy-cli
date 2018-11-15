@@ -1,13 +1,4 @@
-import os
-import re
-import sys
-import signal
 import argparse
-
-from tabulate import tabulate
-from modules.brainspy.brainspy import query_brain, query_names, ba_labels, aal_labels, validate_range
-
-regex = r'[\d+\-]+'
 
 parser = argparse.ArgumentParser(
     description='Transform MNI coordinate to AAL and BA structural names.')
@@ -22,6 +13,15 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+import os
+import re
+import sys
+import signal
+
+from tabulate import tabulate
+from modules.brainspy.brainspy import query_brain, query_names, ba_labels, aal_labels, validate_range
+
+regex = r'[\d+\-]+'
 
 def signal_handler(sig, frame):
     sys.exit(0)
