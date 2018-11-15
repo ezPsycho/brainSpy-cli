@@ -16,3 +16,17 @@ optional arguments:
                         voxels from specific anatomical structures into data
                         queries, default value is 0
 ```
+
+## Tutorial
+
+### Precise query
+
+query brain structure **of** specific MNI coordinate, or its nearest structure.
+
+![Screen record of precise query](https://github.com/ezPsycho/brainSpy-cli/blob/master/docs/assets/precise_query.gif?raw=true)
+
+### Fuzzy query
+
+query brain structure **around** specifc MNI coordinate, or its nearset structure.
+
+![Screen record of fuzzy query](https://github.com/ezPsycho/brainSpy-cli/blob/master/docs/assets/fuzzy_query.gif?raw=true)
