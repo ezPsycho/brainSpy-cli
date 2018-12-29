@@ -23,6 +23,11 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    '-c', '--clipboard', dest='clipboard', action='store_true',
+    help='read content from clipboard, transform it and send the result to clipboard at once'
+)
+
+parser.add_argument(
     '-d', '--debug', dest='debug', action='store_true',
     help='enable debug mode, will throw error while failed to parse the content'
 )
@@ -74,6 +79,28 @@ def silent_run(x, message):
 if args.clipboard:
     _parser = parsers[args.parser](vars(args))
 
+    root = Tk()
+    root.withdraw()
+    time.sleep(0.1)
+
+    try:
+        clipboard_content = root.clipboard_get()
+    except:
+        print('[ERROR] failed to get content from the clipboard.')
+        sys.exit(1)
+    
+    root.destroy()
+
+    clipboard_rows = re.split(r'[~\r\n]+', clipboard_content)
+
+    list(map(_parser.add, clipboard_rows))
+    result = silent_run(_parser.parse, failed_parse_msg)
+    
+    if result is False:
+        sys.exit(1)
+
+    parsed_tsv = silent_run(_parser.parse_tsv, failed_parse_msg)
+    pyperclip.copy(parsed_tsv)
 
     sys.exit(0)
 
