@@ -29,29 +29,38 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+import sys
+
+sys.path.append('./modules/brainspy')
+
 import os
 import re
-import sys
+import time
 import signal
-import readline
 import pyperclip
-
+from tkinter import Tk
 from tabulate import tabulate
-from modules.brainspy.brainspy import query_brain, query_names, ba_labels, aal_labels, validate_range
+
+from parsers import raw, spm
+
+if sys.platform == 'win32':
+     import pyreadline.rlmain
+
+import readline
+
+from brainspy import query_brain, query_names, ba_labels, aal_labels, validate_range
+
+failed_parse_msg = '[ERROR] Failed to parse your content, please check the format.'
 
 if args.parser not in ['raw', 'spm']:
     print('[ERROR] Parser not found, only "raw" and "spm" allowed.')
     sys.exit(1)
-
-from parsers import raw, spm
 
 parsers = {
     'spm': spm.SpmParser,
     'raw': raw.RawParser
 }
 
-def insert_tab(text, state):
-    readline.insert_text('\t')
 def silent_run(x, message):
     if args.debug:
         return x()
@@ -65,8 +74,6 @@ def silent_run(x, message):
 if args.clipboard:
     _parser = parsers[args.parser](vars(args))
 
-readline.parse_and_bind('tab: complete')
-readline.set_completer(insert_tab)
 
 def signal_handler(sig, frame):
     sys.exit(0)
