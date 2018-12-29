@@ -17,7 +17,7 @@ def _to_float_list(x):
 class RawParser(parser.Parser):
     def __init__(self, options = {'radius': None, 'threshold': 0}):
         self.options = options
-        self.regex = r'[\d+\-]+'
+        self.regex = r'\-?\d+'
         self.cli_header = ['X', 'Y', 'Z', 'AAL Label', 'Dist.', 'BA #', 'BA Label', 'Dist.']
         self.clipboard_header = brainspy.query_keys
 
