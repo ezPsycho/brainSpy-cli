@@ -22,6 +22,11 @@ parser.add_argument(
     help='for spm parser only, if keep all peaks or first peak of all clusters'
 )
 
+parser.add_argument(
+    '-d', '--debug', dest='debug', action='store_true',
+    help='enable debug mode, will throw error while failed to parse the content'
+)
+
 args = parser.parse_args()
 
 import os
@@ -47,6 +52,18 @@ parsers = {
 
 def insert_tab(text, state):
     readline.insert_text('\t')
+def silent_run(x, message):
+    if args.debug:
+        return x()
+    else:
+        try:
+            return x()
+        except:
+            print(message)
+            return False
+
+if args.clipboard:
+    _parser = parsers[args.parser](vars(args))
 
 readline.parse_and_bind('tab: complete')
 readline.set_completer(insert_tab)
