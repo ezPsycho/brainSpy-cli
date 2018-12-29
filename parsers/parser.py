@@ -27,7 +27,7 @@ class Parser():
 
         return tabulate(parsed_cache_calues, headers=self.cli_header)
     
-    def parse_clipboard(self):
+    def parse_tsv(self):
         parsed_cache_calues = list(map(lambda x: list(x.values()), self._clipboard_f(deepcopy(self.parsed_cache))))
         table_body = list(map(lambda x: '\t'.join(list(map(str, x))), parsed_cache_calues))
 
