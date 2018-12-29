@@ -75,13 +75,22 @@ if args.clipboard:
     _parser = parsers[args.parser](vars(args))
 
 
+    sys.exit(0)
+
+readline.parse_and_bind("set disable-completion on")  
+readline.parse_and_bind("tab: self-insert")
+
 def signal_handler(sig, frame):
     sys.exit(0)
 
-signal.signal(signal.SIGINT, signal_handler)
-
 def cleanScreen():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+def wraped_input(x = ''):
+    try:
+        return input(x)
+    except KeyboardInterrupt:
+        sys.exit(0)
 
 cleanScreen()
 terminal_marks = ['***', '****']
@@ -102,7 +111,7 @@ Interactive shell          (/      '
     _parser = parsers[args.parser](vars(args))
     
     while last_input not in terminal_marks:
-        last_input = input()
+        last_input = wraped_input()
 
         if last_input in terminal_marks:
             print('[INFO] Querying, please wait...')
@@ -110,10 +119,14 @@ Interactive shell          (/      '
 
         _parser.add(last_input)
 
-    _parser.parse()
+    result = silent_run(_parser.parse, failed_parse_msg)
+
+    if result is False:
+        continue
 
     if last_input == '****':
-        pyperclip.copy(_parser.parse_clipboard())
+        parsed_tsv = silent_run(_parser.parse_tsv, failed_parse_msg)
+        pyperclip.copy(parsed_tsv)
 
     cleanScreen()
     print('\n' + _parser.parse_cli() + '\n')
@@ -121,4 +134,4 @@ Interactive shell          (/      '
     if not args.radius is None:
       print('* Query radius is %s, threshold is %s.' % (args.radius, args.threshold))
     
-    input('\n\nPress enter to continue, Press Ctrl-C to exit.')
+    wraped_input('\n\nPress enter to continue, Press Ctrl-C to exit.')
