@@ -34,14 +34,10 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-import sys
-
-sys.path.append('./modules/brainspy')
-
 import os
 import re
+import sys
 import time
-import signal
 import pyperclip
 from tkinter import Tk
 from tabulate import tabulate
@@ -53,7 +49,7 @@ if sys.platform == 'win32':
 
 import readline
 
-from brainspy import query_brain, query_names, ba_labels, aal_labels, validate_range
+from modules.brainspy.brainspy import query_brain, query_names, ba_labels, aal_labels, validate_range
 
 failed_parse_msg = '[ERROR] Failed to parse your content, please check the format.'
 
