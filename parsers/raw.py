@@ -15,13 +15,13 @@ def _to_float_list(x):
     return list(map(float, x))
 
 class RawParser(parser.Parser):
-    def __init__(self, options = {'radius': None, 'threshold': 0}):
+    def __init__(self, options = {'radius': None, 'threshold': 0}, batch_mode = False):
         self.options = options
         self.regex = r'\-?\d+'
         self.cli_header = ['X', 'Y', 'Z', 'AAL Label', 'Dist.', 'BA #', 'BA Label', 'Dist.']
         self.clipboard_header = brainspy.query_keys
 
-        super(RawParser, self).__init__()
+        super(RawParser, self).__init__(batch_mode)
 
     def filter_inputs(self, x):
         c = re.findall(self.regex, x)
@@ -31,12 +31,17 @@ class RawParser(parser.Parser):
         else:
             return list(map(lambda x: round(float(x)), c[0:3]))
     
-    def query_brain(self, x, sep = '\n'):
+    def query_brain(self, x, sep = '\n', batch = None):
         if not x is None:
-            return dict(zip(
+            _line_result = dict(zip(
                 brainspy.query_keys + ['aal_in_range', 'ba_in_range_idx', 'ba_in_range_label'],
                 brainspy.query_brain(*x, self.options['radius'], self.options['threshold'])
             ))
+        
+            if batch is not None and self.batch_mode:
+                _line_result['batch'] = batch
+            
+            return _line_result
 
     def format_result(self, x, sep = '\n'):
         x['aal.label'] = sep.join(_to_str_list([x['aal.label'], ] + x['aal_in_range']))
@@ -62,8 +67,8 @@ class RawParser(parser.Parser):
 
         return True
     
-    def parser(self, x):
-        return list(map(lambda x: self.query_brain(self.filter_inputs(x)), x))
+    def parser(self, x, batch = None):
+        return list(map(lambda x: self.query_brain(self.filter_inputs(x)), x, batch = batch))
 
     def cli_formater(self, x):
         return list(map(self.format_result, x))

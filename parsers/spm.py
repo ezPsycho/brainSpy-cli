@@ -16,7 +16,7 @@ def _is_float(value):
     return None
 
 class SpmParser(parser.Parser):
-    def __init__(self, options = {'all_peaks': False}):
+    def __init__(self, options = {'all_peaks': False}, batch_mode = False):
         self.cli_header = [
             'Cluster FWE p', 'Cluster FDR p', 'Voxels', 'Cluster Uncor P', 'Peak FWE p', 'Peak FDR p', 'Peak t', 'Peak z', 'Peak Uncor p'
         ] + ['X', 'Y', 'Z', 'AAL Label', 'Dist.', 'BA #', 'BA Label', 'Dist.']
@@ -28,12 +28,12 @@ class SpmParser(parser.Parser):
 
         self.options = options
 
-        super(SpmParser, self).__init__()
+        super(SpmParser, self).__init__(batch_mode)
     
     def cli_validate(self, x):
         return True
     
-    def parser(self, x):
+    def parser(self, x, batch = None):
         parse_result = []
 
         for _input_line in x:
@@ -49,6 +49,9 @@ class SpmParser(parser.Parser):
 
             _line_result = OrderedDict(zip(self.clipboard_header, tuple(map(_is_float, _input_cells[0:9])) + _line_label))
 
+            if batch is not None and self.batch_mode:
+                _line_result['batch'] = batch
+            
             parse_result.append(_line_result)
         
         return parse_result

@@ -2,7 +2,7 @@ from copy import deepcopy
 from tabulate import tabulate
 
 class Parser():
-    def __init__(self):
+    def __init__(self, batch_mode = False):
         self.cache = []
         self.parsed_cache = None
 
@@ -13,6 +13,12 @@ class Parser():
         self._parser = getattr(self, 'parser')
         self._cli_f = getattr(self, 'cli_formater')
         self._clipboard_f = getattr(self, 'clipboard_formater')
+
+        if batch_mode:
+            self.cli_header = self.cli_header + ['Batch']
+            self.clipboard_header = self.cli_header + ['batch']
+        
+        self.batch_mode = batch_mode
 
 
     def add(self, x):
