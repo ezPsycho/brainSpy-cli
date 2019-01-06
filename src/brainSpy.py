@@ -58,3 +58,8 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+from common import atlas_config
+
+from common.Queryer import Queryer
+
+queryer = Queryer(__NSAF_PATH__, args.lang, atlas_config(args.atlas))
