@@ -1,0 +1,3 @@
+[submodule "src/NSAF-data"]
+	path = src/NSAF-data
+	url = https://github.com/ezPsycho/NSAF-data.git
