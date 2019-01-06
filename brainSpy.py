@@ -9,14 +9,27 @@ parser.add_argument(
     'parser', nargs='?', type=str, default='raw', 
     help='selecting one parser for different types of text'
 )
+
+parser.add_argument(
+    '-i', '--input', nargs='?', type=str, metavar='inupt', dest='input', default=None,
+    help='Input data source, "clipboard" for data from clipboard, "interactive" for interactive mode (default), or file path for reading data from a file'
+)
+
+parser.add_argument(
+    '-o', '--output', nargs='?', type=str, metavar='output', dest='output', default=None,
+    help='Output destination of your data, could be "clipboard", "cli" or a file path (don\'t support glob pattern)'
+)
+
 parser.add_argument(
     '-r', '--radius', nargs='?', type=int, metavar='radius', dest='radius', default=None,
     help='the radius of fuzzy query, if provided, brainSpy will not only query the coordinate, but also voxels around the coordinate'
 )
+
 parser.add_argument(
     '-t', '--threshold', nargs='?', type=float, metavar='threshold', dest='threshold', default=0,
     help='the threshold of fuzzy query, incorporate unlabeled voxels from specific anatomical structures into data queries, default value is 0'
 )
+
 parser.add_argument(
     '-a', '--all-peaks', dest='all_peaks', action='store_true',
     help='for spm parser only, if keep all peaks or first peak of all clusters'
