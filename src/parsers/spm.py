@@ -1,9 +1,4 @@
 import re
-import sys
-sys.path.append("..")
-
-import modules.brainspy.brainspy as brainspy
-
 from collections import OrderedDict
 
 from . import parser
@@ -15,49 +10,48 @@ def _is_float(value):
   except ValueError:
     return None
 
+__HEADER_DICT__ = OrderedDict([
+    ('cluster.fwe.p', 'Cluster FWE p'  ),
+    ('cluster.fdr.p', 'Cluster FDR p'  ),
+    ('n.vox'        , 'Voxels'         ),
+    ('cluster.unc.p', 'Cluster Uncor P'),
+    ('peak.fwe.p'   , 'Peak FWE p'     ),
+    ('peak.fdr.p'   , 'Peak FDR p'     ),
+    ('peak.t'       , 'Peak t'         ), 
+    ('peak.z'       , 'Peak z'         ),
+    ('peak.unc.p'   , 'Peak Uncor p'   ),
+    ('x'            ,  'X'             ),
+    ('y'            ,  'Y'             ),
+    ('z'            ,  'Z'             ) 
+])
+
 class SpmParser(parser.Parser):
-    def __init__(self, options = {'all_peaks': False}, batch_mode = False):
-        self.cli_header = [
-            'Cluster FWE p', 'Cluster FDR p', 'Voxels', 'Cluster Uncor P', 'Peak FWE p', 'Peak FDR p', 'Peak t', 'Peak z', 'Peak Uncor p'
-        ] + ['X', 'Y', 'Z', 'AAL Label', 'Dist.', 'BA #', 'BA Label', 'Dist.']
-
-        self.clipboard_header = [
-            'cluster.fwe.p', 'cluster.fdr.p', 'n.vox', 'cluster.unc.p', 
-            'peak.fwe.p', 'peak.fdr.p', 'peak.t', 'peak.z', 'peak.unc.p'
-        ] + brainspy.query_keys
-
+    def __init__(self, queryer, options = {'all_peaks': False}):
+        self.header_dict = __HEADER_DICT__
         self.options = options
 
-        super(SpmParser, self).__init__(batch_mode)
-    
-    def cli_validate(self, x):
+        super(SpmParser, self).__init__(queryer)
+
+    def validate(self, x):
         return True
     
-    def parser(self, x, batch = None):
-        parse_result = []
-
-        for _input_line in x:
-            _input_cells = list(map(lambda x: x.strip(), _input_line.split('\t')))
-            if len(_input_cells) < 11:
-                continue
-            
-            if _is_float(_input_cells[0]) is None and not self.options['all_peaks']:
-                continue
-            
-            _line_coord = list(map(_is_float, re.split(r'\s+', _input_cells[9])))
-            _line_label = brainspy.query_brain(_line_coord[0], _line_coord[1], _line_coord[2])
-
-            _line_result = OrderedDict(zip(self.clipboard_header, tuple(map(_is_float, _input_cells[0:9])) + _line_label))
-
-            if batch is not None and self.batch_mode:
-                _line_result['batch'] = batch
-            
-            parse_result.append(_line_result)
+    def parse(self, x):
+        _input_cells = list(map(lambda x: x.strip(), x.split('\t')))
+        if len(_input_cells) < 11:
+            return None
         
-        return parse_result
+        if _is_float(_input_cells[0]) is None and not self.options['all_peaks']:
+            return None
 
-    def cli_formater(self, x):
-        return x
+        _coord_str = filter(lambda x: x != '', re.split(r'\s+', _input_cells[10]))
+        _fmt_input_cells = list(map(_is_float, _input_cells[0:9])) + _coord_str
 
-    def clipboard_formater(self, x):
-        return x
+        _line_result = OrderedDict(zip(
+            __HEADER_DICT__.keys(), _fmt_input_cells
+        ))
+
+        _coord = tuple(map(int, _coord_str))
+
+        _line_result['coord'] = _coord
+        
+        return _line_result

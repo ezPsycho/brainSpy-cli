@@ -19,6 +19,9 @@ class Queryer():
 
         for _idx in config:
             self.atlas_set[_idx] = Atlas(path.join(root, _idx), lang = lang)
+    
+    def ck_boundary(self, coord):
+        return all(map(lambda x: x.ck_boundary(coord), self.atlas_set))
 
     def cquery(self, x, radius = None, no_coord = True):
         result = {}
