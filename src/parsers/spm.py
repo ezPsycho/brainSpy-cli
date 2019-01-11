@@ -26,11 +26,11 @@ __HEADER_DICT__ = OrderedDict([
 ])
 
 class SpmParser(parser.Parser):
-    def __init__(self, queryer, options = {'all_peaks': False}):
+    def __init__(self, atlas_set, options = {'all_peaks': False}):
         self.header_dict = __HEADER_DICT__
         self.options = options
 
-        super(SpmParser, self).__init__(queryer)
+        super(SpmParser, self).__init__(atlas_set)
 
     def validate(self, x):
         return True

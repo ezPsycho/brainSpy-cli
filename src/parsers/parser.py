@@ -3,10 +3,10 @@ from tabulate import tabulate
 from collections import OrderedDict
 
 class Parser():
-    def __init__(self, queryer):
+    def __init__(self, atlas_set):
         self.cache = []
         self.parsed_cache = None
-        self.queryer = queryer
+        self.atlas_set = atlas_set
 
         self.validator = getattr(self, 'validate')
         self.parser = getattr(self, 'parse')
@@ -18,7 +18,7 @@ class Parser():
             if batch:
                 parsed_result = [('batch', batch)] + parsed_result
 
-            if self.queryer(parsed_result['coord'].ck_boundary):
+            if self.atlas_set.ck_boundary(parsed_result['coord']):
                 self.cache.append(OrderedDict(parsed_result))
             else:
                 print('[WARN] The coordinate exceeds the bounding box, ignored.')

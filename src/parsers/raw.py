@@ -14,11 +14,11 @@ __HEADER_DICT__ = OrderedDict([
 ])
 
 class RawParser(parser.Parser):
-    def __init__(self, queryer, options = {'radius': None, 'threshold': 0}):
+    def __init__(self, atlas_set, options = {'radius': None, 'threshold': 0}):
         self.header_dict = __HEADER_DICT__
         self.options = options
 
-        super(RawParser, self).__init__(queryer)
+        super(RawParser, self).__init__(atlas_set)
 
     def filter_inputs(self, x):
         c = re.findall(__RE__, x)

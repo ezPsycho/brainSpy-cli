@@ -1,8 +1,14 @@
+import csv
 import pyperclip
-from tabulate import tabulate
+
 from ..common import clean_screen
 
-def clipboardProducer(parser, dest = None):
-    parsed_tsv = parser.parse_tsv()
-    pyperclip.copy(parsed_tsv)
-    return True
+class ClipboardProducer:
+    def __init__(self):
+        self.format = 'r'
+        self.simp = True
+    
+    def run(self, x):
+        parsed_tsv = csv.DictWriter() # Write Here
+        pyperclip.copy(parsed_tsv)
+        return True

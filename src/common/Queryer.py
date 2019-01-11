@@ -1,27 +1,12 @@
-from os import path
 from copy import deepcopy
 from collections import OrderedDict
 
-from NSAF.Atlas import Atlas
-
-__DEFAULT_CONFIG__ = {'aal': ['name'], 'ba': ['label']}
 __FORCE_ROUND_ITEM__ = ['dist', 'ratio']
 
 class Queryer():
-    def __init__(self, root, lang = None, config = __DEFAULT_CONFIG__):
-        self.root = root
-        self.config = config
-
-        self.lang = lang
-        self.atlas_set = OrderedDict()
-        
+    def __init__(self, atlas_set):
         self.query = self.cquery
-
-        for _idx in config:
-            self.atlas_set[_idx] = Atlas(path.join(root, _idx), lang = lang)
-    
-    def ck_boundary(self, coord):
-        return all(map(lambda x: x.ck_boundary(coord), self.atlas_set))
+        self.atlas_set = atlas_set
 
     def cquery(self, x, radius = None, no_coord = True):
         result = {}
@@ -36,7 +21,7 @@ class Queryer():
         for _atlas in self.atlas_set:
             _atlas_prefix = self.atlas_set[_atlas].config['META']['id']
             header = header + list(
-                map(lambda x: self._fmt_q_key(_atlas_prefix, x), self.config[_atlas] + add_item)
+                map(lambda x: self._fmt_q_key(_atlas_prefix, x), self.atlas_set.config[_atlas] + add_item)
             )
         
         for _header in header:
@@ -55,7 +40,7 @@ class Queryer():
                             __q[_item] = round(__q[_item], 3)
 
                 for __q in _q:
-                    for _item in self.config[_atlas] + add_item:
+                    for _item in self.atlas_set.config[_atlas] + add_item:
                         _atlas_prefix = self.atlas_set[_atlas].config['META']['id']
                         _col = self._fmt_q_key(_atlas_prefix, _item)
                         
@@ -85,7 +70,7 @@ class Queryer():
                 for __q in _q:
                     _atlas_result = OrderedDict()
 
-                    for _item in self.config[_atlas] + add_item:
+                    for _item in self.atlas_set.config[_atlas] + add_item:
                         if _item not in __q:
                             _atlas_result[_item] = ''
                         else:
