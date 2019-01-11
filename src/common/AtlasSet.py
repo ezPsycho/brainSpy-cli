@@ -17,4 +17,4 @@ class AtlasSet(OrderedDict):
             self[_idx] = Atlas(path.join(root, _idx),  lang)
 
     def ck_boundary(self, coord):
-        return all(map(lambda x: x.ck_boundary(coord), self))
+        return all(map(lambda x: self[x].ck_boundary(coord), self))

@@ -11,13 +11,13 @@ __GENERAL_DICT__ = {
     'idx': 'Index'
 }
 
-__RE__ = r'^\!@@(\S+)\!&&(\S+)'
+__RE__ = r'^\!@@(\S+)\!&&(\S+)$'
 
 def parse_dynamic_col(x):
     m = re.match(__RE__, x)
-
+    
     if m:
-        return m.group()
+        return m.group(1, 2)
     else:
         return None
 
@@ -33,12 +33,12 @@ def _format_single_header(x, atlas_set, parser, simp = False):
                 _x[parser.header_dict[_key]] = x[_key]
                 continue
 
-        _p = parse_dynamic_col(x)
+        _p = parse_dynamic_col(_key)
         if _p:
             atlas_name = atlas_set[_p[0]].config['META']['id' if simp else 'name']
             atlas_item = _p[1] if simp else __GENERAL_DICT__[_p[1]]
             name_sep = '.' if simp else ' '
-            key_name = '%s%s%s' % (atlas_name, atlas_item, name_sep)
+            key_name = '%s%s%s' % (atlas_name, name_sep, atlas_item)
 
             _x[key_name] = x[_key]
         else:

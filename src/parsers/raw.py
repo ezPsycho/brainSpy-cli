@@ -13,12 +13,12 @@ __HEADER_DICT__ = OrderedDict([
     ('z', 'Z') 
 ])
 
-class RawParser(parser.Parser):
+class Parser(parser.ParserBase):
     def __init__(self, atlas_set, options = {'radius': None, 'threshold': 0}):
         self.header_dict = __HEADER_DICT__
         self.options = options
 
-        super(RawParser, self).__init__(atlas_set)
+        super(Parser, self).__init__(atlas_set)
 
     def filter_inputs(self, x):
         c = re.findall(__RE__, x)
@@ -28,7 +28,7 @@ class RawParser(parser.Parser):
         else:
             return list(map(lambda x: round(float(x)), c[0:3]))
 
-    def cli_validate(self, x):
+    def validate(self, x):
         coordinate = re.findall(__RE__, x)
 
         if not len(coordinate) >= 3:
@@ -39,7 +39,7 @@ class RawParser(parser.Parser):
     
     def parse(self, x):
         coord_str = re.findall(__RE__, x)
-        coord = tuple(map(lambda y: round(float(x)), x))
+        coord = tuple(map(lambda y: round(float(y)), coord_str))
         result = OrderedDict(zip(
             ('x', 'y', 'z'), 
             coord_str

@@ -1,9 +1,12 @@
-import os
 import sys
-import csv
-from ..common import clean_screen
+sys.path.append('..')
 
-class FileProducer:
+import os
+import csv
+
+from common import clean_screen
+
+class Producer:
     def __init__(self, file):
         self.format = 'r'
         self.simp = True

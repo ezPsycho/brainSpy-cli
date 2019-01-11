@@ -17,12 +17,12 @@ argv_p.add_argument(
 )
 
 argv_p.add_argument(
-    '-i', '--input', nargs='?', type=str, metavar='pattern', dest='input', default=None,
+    '-i', '--input', nargs='?', type=str, metavar='pattern', dest='input', default='interactive',
     help='Input data source, "clipboard" for data from clipboard, "interactive" for interactive mode (default), or file path for reading data from a file'
 )
 
 argv_p.add_argument(
-    '-o', '--output', nargs='?', type=str, metavar='path', dest='output', default=None,
+    '-o', '--output', nargs='?', type=str, metavar='path', dest='output', default='terminal',
     help='Output destination of your data, could be "clipboard", "terminal" or a file path (don\'t support glob pattern)'
 )
 
@@ -63,7 +63,8 @@ __READERS__ = {
     'clip': 'clipboard',
     'clipboard': 'clipboard',
     'i': 'interactive',
-    'interact': 'interactive'
+    'interact': 'interactive',
+    'interactive': 'interactive'
 }
 
 __PARSERS__ = {
@@ -88,50 +89,55 @@ import importlib
 from common import atlas_config
 from common.Queryer import Queryer
 from common.AtlasSet import AtlasSet
+from common import format_header
 
 # Initialize atlas and queryer
-atlas_set = AtlasSet(__NSAF_PATH__, args.lang, atlas_config(args.atlas))
+atlas_set = AtlasSet(__NSAF_PATH__, args.lang, atlas_config.format(args.atlas))
 queryer = Queryer(atlas_set)
 
 # Initialize input source and output destinition
 if args.input in __READERS__:
-    Reader = importlib.import_module('readers.' % __READERS__[args.input])
+    Reader = importlib.import_module('readers.%s' % __READERS__[args.input])
 else:
-    Reader = importlib.import_module('readers.' % 'file')
+    Reader = importlib.import_module('readers.%s' % 'file')
 
 if args.output in __PRODUCERS__:
-    Producer = importlib.import_module('producers.' % __PRODUCERS__[args.output])
+    Producer = importlib.import_module('producers.%s' % __PRODUCERS__[args.output])
 else:
-    Producer = importlib.import_module('producers.' % 'file')
+    Producer = importlib.import_module('producers.%s' % 'file')
 
-reader = Reader()
-producer = Producer()
+reader = Reader.Reader(args)
+producer = Producer.Producer()
 
 while True:
     # Initialize content parser
     if args.parser in __PARSERS__:
-        Parser = importlib.import_module('parsers.' % __PARSERS__[args.parser])
-        parser = Parser(atlas_set)
+        Parser = importlib.import_module('parsers.%s' % __PARSERS__[args.parser])
+        parser = Parser.Parser(atlas_set)
     else:
         print('[ERROR] Parser not found!')
         sys.exit(1)
     # Start reading data from sorce:
-    rows = reader.run(parser, args)
+    reader.run(parser)
+
+    rows = parser.fetch()
 
     # Producer will tell us what kind of data it need:
-    d_format = Producer.format
-    d_simp = Producer.simp
+    d_format = producer.format
+    d_simp = producer.simp
 
     # Start querying based on d_format
     if d_format == 'c':
-        q = queryer.cquery(rows, argv_p.radius)
+        q = queryer.cquery(rows, args.radius)
+        header_formater = format_header.c_format_header
     elif d_format == 'r':
-        q = queryer.rquery(rows, argv_p.radius)
+        q = queryer.rquery(rows, args.radius)
+        header_formater = format_header.r_format_header
     else:
         print('[ERROR] Illegal producer format, checkout the source code!')
         sys.exit(1)
     
-    producer.run(q)
+    producer.run(header_formater(q, atlas_set, parser))
 
     if not reader.loop:
         break

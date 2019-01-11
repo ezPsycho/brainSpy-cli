@@ -3,11 +3,11 @@ import sys
 import time
 from tkinter import Tk
 
-class ClipboardReader:
-    def __init__(self):
+class Reader:
+    def __init__(self, args):
         self.loop = False
     
-    def run(x, parser, args = None):
+    def run(self, parser):
         # Read content from clipboard with Tk:
         root = Tk()
         root.withdraw()

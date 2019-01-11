@@ -1,6 +1,6 @@
 import sys
 
-def wraped_input(x = ''):
+def wrapped_input(x = ''):
     try:
         return input(x)
     except KeyboardInterrupt:

@@ -3,12 +3,13 @@ import sys
 from os import path
 from glob import glob
 
-class FileReader:
-    def __init__(self):
+class Reader:
+    def __init__(self, args):
         self.loop = False
+        self.args = args
 
-    def run(parser, args = None):
-        matched_files = glob(args.input)
+    def run(self, parser):
+        matched_files = glob(self.args.input)
 
         if len(matched_files) == 0:
             print('[ERROR] The path didn\'t matched any file.')

@@ -1,17 +1,20 @@
-from ..common import wrapped_input
-from ..common import clean_screen
+import sys
+sys.path.append('..')
+
+from common.wrapped_input import wrapped_input
+from common.clean_screen import clean_screen
 
 __TERMINATE_MARKS__ = ['***', '****']
 
-class InteractiveReader:
-    def __init__(self):
+class Reader:
+    def __init__(self, args):
         self.loop = True
     
-    def run(self, parser, args = None):
+    def run(self, parser):
         print("""
-_ __                   __,            
+ _ __                   __,            
 ( /  )         o       (               
-/--< _   __, ,  _ _    `.   ,_   __  ,
+ /--< _   __, ,  _ _    `.   ,_   __  ,
 /___// (_(_/(_(_/ / /_(___)_/|_)_/ (_/_
                             /|      /  
 Interactive shell          (/      '   
