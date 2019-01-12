@@ -1,28 +1,30 @@
 import sys
 sys.path.append('..')
 
-import os
 import csv
 
 from common import clean_screen
 
 class Producer:
-    def __init__(self, file):
+    def __init__(self, args):
         self.format = 'r'
         self.simp = True
 
-        if not os.access(file, os.W_OK):
-            print('[ERROR] Target file is not writable.')
-            sys.exit(1)
-
-        self.file = file
+        self.file = args.output
     
     def run(self, x):
-        with open(self.file, 'w') as f:
+        with open(self.file, 'w', newline='') as f:
             if not f.writable:
                 print('[ERROR] Failed to write.')
                 sys.exit(1)
             
-            f.write(csv.DictWriter()) #Change Here
+            writer = csv.DictWriter(
+                f,
+                fieldnames = list(x[0].keys()),
+                delimiter = '\t'
+            )
+
+            writer.writeheader()
+            list(map(writer.writerow, x))
 
             return True

@@ -107,7 +107,7 @@ else:
     Producer = importlib.import_module('producers.%s' % 'file')
 
 reader = Reader.Reader(args)
-producer = Producer.Producer()
+producer = Producer.Producer(args)
 
 while True:
     # Initialize content parser

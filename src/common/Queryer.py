@@ -80,14 +80,18 @@ class Queryer():
                         if _item not in __q:
                             _atlas_result[_item] = ''
                         else:
-                            _atlas_result[_item] = __q[_item]
+                            if _item in __FORCE_ROUND_ITEM__:
+                                _atlas_result[_item] = round(__q[_item], 3)
+                            else:
+                                _atlas_result[_item] = __q[_item]
+                            
                     
                     _row_q[_atlas].append(_atlas_result)
         
             if no_coord:
                 del _row['coord']
 
-            result.append(self._fmt_q(_row, _row_q, bool(radius)))
+            result = result + self._fmt_q(_row, _row_q, bool(radius))
         
         return result
 

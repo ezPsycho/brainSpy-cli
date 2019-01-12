@@ -6,7 +6,7 @@ from common.clean_screen import clean_screen
 from common.wrapped_input import wrapped_input
 
 class Producer:
-    def __init__(self):
+    def __init__(self, args):
         self.format = 'c'
         self.simp = False
     
