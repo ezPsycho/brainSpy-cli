@@ -12,6 +12,10 @@ class Producer:
     
     def run(self, x):
         clean_screen()
-        print('\n' + tabulate(x, headers='keys') + '\n')
+        if len(x) == 0:
+            print('[INFO] Got nothing from the source.')
+        else:
+            print('\n' + tabulate(x, headers='keys') + '\n')
+
         wrapped_input('Press anykey to continue...')
         return True

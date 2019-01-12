@@ -11,6 +11,9 @@ class Queryer():
     def cquery(self, x, radius = None, no_coord = True):
         result = {}
 
+        if not len(x):
+            return result
+
         if radius:
             add_item = ['dist', 'ratio']
         else:
@@ -53,6 +56,9 @@ class Queryer():
     
     def rquery(self, x, radius = None, no_coord = True):
         result = []
+
+        if not len(x):
+            return result
         
         if radius:
             add_item = ['dist', 'ratio']

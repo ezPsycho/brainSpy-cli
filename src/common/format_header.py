@@ -8,7 +8,8 @@ __GENERAL_DICT__ = {
     'Ratio': 'Ratio',
     'label': 'Label',
     'name': 'Name',
-    'idx': 'Index'
+     'idx': 'Index',
+     'batch': 'Batch'
 }
 
 __RE__ = r'^\!@@(\S+)\!&&(\S+)$'
@@ -42,7 +43,8 @@ def _format_single_header(x, atlas_set, parser, simp = False):
 
             _x[key_name] = x[_key]
         else:
-            _x[_key] == x[_key]
+            _x[_key] = x[_key]
+
     return _x
 
 def r_format_header(x, atlas_set, parser):

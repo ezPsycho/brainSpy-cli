@@ -117,12 +117,13 @@ while True:
     else:
         print('[ERROR] Parser not found!')
         sys.exit(1)
-    # Start reading data from sorce:
+
+    # Start reading data from sorce
     reader.run(parser)
 
     rows = parser.fetch()
 
-    # Producer will tell us what kind of data it need:
+    # Producer will tell us what kind of data it need
     d_format = producer.format
     d_simp = producer.simp
 
