@@ -4,8 +4,12 @@ import argparse
 
 from os import path
 
-__VERSION__ = '0.0.2'
-__NSAF_PATH__ = path.join(path.dirname(path.realpath(__file__)), 'data')
+__VERSION__ = '0.2.0'
+
+__EXECUTABLE_MODE__ = getattr(sys, 'frozen', False)
+__BRAINSPY_PATH__ = path.dirname(path.realpath(sys.executable if __EXECUTABLE_MODE__ else __file__))
+__NSAF_PATH__ = path.join(__BRAINSPY_PATH__, 'data')
+
 __DEFAULT_QUERY_ITEMS__ = [['aal', 'name'], ['ba', 'label']]
 
 argv_p = argparse.ArgumentParser(

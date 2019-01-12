@@ -12,7 +12,12 @@ class ParserBase():
 
     def add(self, x, batch = None):
         if self.validator(x):
-            parsed_result = list(self.parser(x).items())
+            _p = self.parser(x)
+
+            if not _p:
+                return False
+
+            parsed_result = list(_p.items())
 
             if batch:
                 parsed_result = [('batch', batch)] + parsed_result
