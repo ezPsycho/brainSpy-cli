@@ -2,11 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "brainSpy"
-#define MyAppVersion "0.1.1"
+#define MyAppVersion "0.2.0"
 #define MyAppPublisher "LOSSES Don"
 #define MyAppURL "https://github.com/ezPsycho/brainSpy-cli"
 #define MyAppExeName "brainSpy.exe"
-#define BasePath "D:\Documents\development\brainSpy-cli_"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -22,12 +21,12 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile={#BasePath}\etc\inno\LICENSE.rtf
+LicenseFile={#SourcePath}\LICENSE.rtf
 WizardImageFile=banner.bmp
 WizardSmallImageFile=small_icon.bmp
-OutputDir={#BasePath}\dist
+OutputDir={#SourcePath}\..\..\dist
 OutputBaseFilename=setup
-SetupIconFile={#BasePath}\etc\inno\installer_icon.ico
+SetupIconFile={#SourcePath}\installer_icon.ico
 Compression=lzma2/max
 SolidCompression=yes
 DisableWelcomePage=no
@@ -48,8 +47,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "{#BasePath}\dist\brainSpy\brainSpy.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BasePath}\dist\brainSpy\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#SourcePath}\..\..\dist\brainSpy\brainSpy.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\dist\brainSpy\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
