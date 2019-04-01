@@ -2,7 +2,7 @@
 
 Transform MNI coordinate to AAL and BA structural names.
 
-`brainSpy-cli` is based on `brainSpy.py`, if you want to use brainSpy in python script, please checkout [this repo](https://github.com/ezPsycho/brainSpy.py).
+`brainSpy-cli` is based on `NSAF.py`, if you want to use brainSpy in python script, please checkout [this repo](https://github.com/ezPsycho/NSAF.py).
 
 **Please notice the program is too beta to be used for production purpose, code review and further checks are necessary.**
 
